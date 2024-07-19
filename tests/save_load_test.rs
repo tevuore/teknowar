@@ -14,5 +14,7 @@ mod integration_tests {
         // TODO load
 
         assert_eq!("game01", game.id);
+        assert_eq!(32, game.map.size);
+        assert_eq!(1, game.turn);
     }
 }
