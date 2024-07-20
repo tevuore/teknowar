@@ -4,7 +4,6 @@ mod map_tests {
 
     #[test]
     fn should_create_empty_map() {
-        let game: Option<Game> = None;
         let game = Game::new("game01", 32, 2);
 
         assert_eq!("game01", game.id);
@@ -24,6 +23,9 @@ mod map_tests {
 
         assert_eq!(player1.energy, 100);
         assert_eq!(player2.energy, 100);
+
+        // TODO check that players are found from map
+        // TODO later better check for starting pattern
     }
 
     // TODO test for exceeding max players

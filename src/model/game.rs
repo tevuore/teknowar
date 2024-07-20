@@ -57,7 +57,9 @@ pub struct Map {
 
 impl Map {
     pub fn new(size: u8) -> Map {
-        let data = vec![vec![MapCell::empty(); size as usize]; size as usize];
+        // assuming indexing starts from 0
+        let coord_size = size as usize;
+        let data = vec![vec![MapCell::empty(); coord_size]; coord_size];
         Map { size, cells: data }
     }
 
@@ -89,4 +91,32 @@ pub struct Player {
     pub symbol: PlayerSymbol,
     pub name: String,
     pub energy: u32,
+}
+
+/// Find starting coordinates for players
+fn distribute_players(
+    map_width: usize,
+    map_height: usize,
+    num_players: usize,
+) -> Vec<(usize, usize)> {
+    let total_cells = map_width * map_height;
+    let spacing = (total_cells as f64 / num_players as f64).sqrt().round() as usize;
+
+    let mut players_positions = Vec::new();
+    let mut x = 0;
+    let mut y = 0;
+
+    for _ in 0..num_players {
+        players_positions.push((x, y));
+        x += spacing;
+        if x >= map_width {
+            x %= map_width;
+            y += spacing;
+            if y >= map_height {
+                y %= map_height;
+            }
+        }
+    }
+
+    players_positions
 }
