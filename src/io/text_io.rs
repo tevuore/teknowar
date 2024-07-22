@@ -2,14 +2,26 @@ use crate::model::game::Game;
 
 // TODO fn to center map on player
 
-pub fn convert_to_text_map(game: Game) -> String {
+pub fn convert_to_text_map_2w(game: Game) -> String {
     let map = &game.map;
     let mut buffer = String::new();
-    let x_header = generate_x_coords_header(map.size);
+    let x_header = generate_x_coords_header_2w(map.size);
     buffer.push_str(&x_header);
 
     for y in 0..map.size {
-        buffer.push_str(&generate_map_row(y, &game))
+        buffer.push_str(&generate_map_row_2w(y, &game))
+    }
+    buffer
+}
+
+pub fn convert_to_text_map_3w(game: Game) -> String {
+    let map = &game.map;
+    let mut buffer = String::new();
+    let x_header = generate_x_coords_header_3w(map.size);
+    buffer.push_str(&x_header);
+
+    for y in 0..map.size {
+        buffer.push_str(&generate_map_row_3w(y, &game))
     }
     buffer
 }
@@ -17,7 +29,7 @@ pub fn convert_to_text_map(game: Game) -> String {
 /// Generates a row like
 /// 01 02 03 04 05 06 07 08 09 10
 ///
-fn generate_x_coords_header(size: u8) -> String {
+fn generate_x_coords_header_3w(size: u8) -> String {
     let mut buffer = String::new();
 
     // TODO do we need guard against max size by Result?
@@ -51,7 +63,7 @@ fn generate_x_coords_header(size: u8) -> String {
 /// 0 0 0 0 0 0 0 0 0 0 1
 /// 0 1 2 3 4 5 6 7 8 9 0
 ///
-fn generate_x_coords_header_2_row_version(size: u8) -> String {
+fn generate_x_coords_header_2w(size: u8) -> String {
     let mut buffer = String::new();
 
     // TODO do we need guard against max size by Result?
@@ -98,9 +110,48 @@ fn generate_x_coords_header_2_row_version(size: u8) -> String {
 }
 
 /// Generates a row like where first two digits are y coord
+/// 01 h1a2. . b2
+///
+fn generate_map_row_2w(row: u8, game: &Game) -> String {
+    let map = &game.map;
+    let players = &game.players;
+    let max_x = map.size;
+
+    let mut buffer = String::new();
+
+    let row_10th = row / 10;
+    let row_1th = row % 10;
+    buffer.push_str(&row_10th.to_string());
+    buffer.push_str(&row_1th.to_string());
+    buffer.push(' ');
+
+    for x in 0..max_x {
+        let cell = map.get(row, x);
+        match cell.owner {
+            Some(m) => {
+                let player_symbol = players
+                    .get(&m)
+                    .unwrap_or_else(|| panic!("No player for id {m}"))
+                    .symbol;
+                let size = cell.size;
+                let cell_str = format!("{player_symbol}{size}");
+                buffer.push_str(&cell_str);
+            }
+            None => {
+                buffer.push_str(". ");
+            }
+        }
+    }
+
+    buffer.push('\n');
+
+    buffer
+}
+
+/// Generates a row like where first two digits are y coord
 /// 01 h1 a2 .. .. b2
 ///
-fn generate_map_row(row: u8, game: &Game) -> String {
+fn generate_map_row_3w(row: u8, game: &Game) -> String {
     let map = &game.map;
     let players = &game.players;
     let max_x = map.size;
