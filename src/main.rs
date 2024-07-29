@@ -1,6 +1,7 @@
 use crate::model::game::Game;
 
 mod io;
+pub mod logic;
 pub mod model;
 
 fn main() {

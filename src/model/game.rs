@@ -22,6 +22,14 @@ impl Game {
         }
     }
 
+    pub fn copy(&self, new_map: Map) -> Game {
+        Game {
+            id: self.id.clone(),
+            turn: self.turn,
+            map: new_map,
+            players: self.players.clone(),
+        }
+    }
     fn create_players(players: u8) -> HashMap<PlayerId, Player> {
         let mut players_map: HashMap<PlayerId, Player> = HashMap::new();
         let default_energy = 100;
@@ -29,7 +37,7 @@ impl Game {
         for i in 0..players {
             let id: PlayerId = i + 1u8;
             let default_name = format!("Player {}", i + 1);
-            let symbol_idx = b'A' + i;
+            let symbol_idx = b'a' + i;
             // TODO error if out of symbol range -> return result
             if symbol_idx > b'z' {
                 panic!("Available symbols exceeded");
@@ -63,17 +71,39 @@ impl Map {
         Map { size, cells: data }
     }
 
-    // TODO top left corner 1,1 or 0,0 ?
+    // TODO remove or rename
+    pub fn clone(&self) -> Map {
+        Map {
+            size: self.size,
+            cells: self.cells.clone(),
+        }
+    }
+
+    // top left corner is 0,0
     pub fn get(&self, row: u8, col: u8) -> &MapCell {
         &self.cells[row as usize][col as usize]
     }
+
+    pub fn set(&mut self, row: u8, col: u8, new_cell: MapCell) {
+        self.cells[row as usize][col as usize] = new_cell;
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum PlexType {
+    None,      // TODO enforce, size 0 can't have owner
+    Generator, // TODO enforce generator can't have owner
+    Normal,
+    Attack,
+    Defend,
 }
 
 #[derive(Debug, Clone)]
 pub struct MapCell {
     pub size: u8,
+    pub plex_type: PlexType,
     pub owner: Option<PlayerId>, // TODO is this id?
-                                 // TODO infection?
+                                 // TODO horner infection?
 }
 
 impl MapCell {
@@ -81,6 +111,7 @@ impl MapCell {
         MapCell {
             size: 0,
             owner: None,
+            plex_type: PlexType::None,
         }
     }
 }
@@ -91,32 +122,4 @@ pub struct Player {
     pub symbol: PlayerSymbol,
     pub name: String,
     pub energy: u32,
-}
-
-/// Find starting coordinates for players
-fn distribute_players(
-    map_width: usize,
-    map_height: usize,
-    num_players: usize,
-) -> Vec<(usize, usize)> {
-    let total_cells = map_width * map_height;
-    let spacing = (total_cells as f64 / num_players as f64).sqrt().round() as usize;
-
-    let mut players_positions = Vec::new();
-    let mut x = 0;
-    let mut y = 0;
-
-    for _ in 0..num_players {
-        players_positions.push((x, y));
-        x += spacing;
-        if x >= map_width {
-            x %= map_width;
-            y += spacing;
-            if y >= map_height {
-                y %= map_height;
-            }
-        }
-    }
-
-    players_positions
 }

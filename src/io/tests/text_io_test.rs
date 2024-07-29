@@ -86,27 +86,4 @@ mod text_io_tests {
             }
         }
     }
-
-    #[test]
-    fn should_create_small_map_with_players() {
-        let game = Game::new("game01", 10, 2);
-
-        let text_map = convert_to_text_map_3w(game);
-
-        // TODO find out players and verify initial formation
-
-        print!("{}", text_map);
-    }
-
-    fn should_create_large_map_with_players() {
-        // TODO make constants for map sizes
-        // TODO make func for maximum players
-        // TODO verify spacing
-
-        let game = Game::new("game01", 24, 10);
-
-        let text_map = convert_to_text_map_3w(game);
-
-        print!("{}", text_map);
-    }
 }

@@ -1,2 +1,2 @@
 mod tests;
-mod text_io;
+pub mod text_io;
