@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod text_io_tests {
-    use crate::io::text_io::convert_to_text_map_3w;
     use crate::logic::new_game::{create_new_game_with_initial_setup, AmountOfPlayers};
+    use crate::storage::text_io::convert_to_text_map_3w;
 
     #[test]
     fn should_calculate_initial_positions() {}

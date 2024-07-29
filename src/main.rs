@@ -1,8 +1,8 @@
 use crate::model::game::Game;
 
-mod io;
 pub mod logic;
 pub mod model;
+mod storage;
 
 fn main() {
     let game = Game::new("game01", 32, 2);
