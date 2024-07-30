@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod text_io_tests {
     use crate::logic::new_game::{create_new_game_with_initial_setup, AmountOfPlayers};
-    use crate::storage::text_io::convert_to_text_map_3w;
+    use crate::storage::text_io::{convert_to_text_map_2w, convert_to_text_map_3w};
 
     #[test]
     fn should_calculate_initial_positions() {}
@@ -21,10 +21,23 @@ mod text_io_tests {
     }
 
     #[test]
-    fn should_create_game_with_4_players() {
+    fn should_create_game_with_4_players_with_3_cell_width() {
         let game = create_new_game_with_initial_setup("game01", AmountOfPlayers::Four);
 
         let text_map = convert_to_text_map_3w(game);
+
+        // for debugging
+        // TODO option to turn off?
+        print!("{}", text_map);
+
+        // TODO find out players and verify initial formation
+    }
+
+    #[test]
+    fn should_create_game_with_4_players_with_2_cell_width() {
+        let game = create_new_game_with_initial_setup("game01", AmountOfPlayers::Four);
+
+        let text_map = convert_to_text_map_2w(game);
 
         // for debugging
         // TODO option to turn off?

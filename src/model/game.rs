@@ -80,12 +80,12 @@ impl Map {
     }
 
     // top left corner is 0,0
-    pub fn get(&self, row: u8, col: u8) -> &MapCell {
-        &self.cells[row as usize][col as usize]
+    pub fn get(&self, x: u8, y: u8) -> &MapCell {
+        &self.cells[x as usize][y as usize]
     }
 
-    pub fn set(&mut self, row: u8, col: u8, new_cell: MapCell) {
-        self.cells[row as usize][col as usize] = new_cell;
+    pub fn set(&mut self, x: u8, y: u8, new_cell: MapCell) {
+        self.cells[x as usize][y as usize] = new_cell;
     }
 }
 

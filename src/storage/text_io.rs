@@ -8,8 +8,8 @@ pub fn convert_to_text_map_2w(game: Game) -> String {
     let x_header = generate_x_coords_header_2w(map.size);
     buffer.push_str(&x_header);
 
-    for y in 0..map.size {
-        buffer.push_str(&generate_map_row_2w(y, &game))
+    for y_row in 0..map.size {
+        buffer.push_str(&generate_map_row_2w(y_row, &game))
     }
     buffer
 }
@@ -20,8 +20,8 @@ pub fn convert_to_text_map_3w(game: Game) -> String {
     let x_header = generate_x_coords_header_3w(map.size);
     buffer.push_str(&x_header);
 
-    for y in 0..map.size {
-        buffer.push_str(&generate_map_row_3w(y, &game))
+    for y_row in 0..map.size {
+        buffer.push_str(&generate_map_row_3w(y_row, &game))
     }
     buffer
 }
@@ -112,21 +112,21 @@ fn generate_x_coords_header_2w(size: u8) -> String {
 /// Generates a row like where first two digits are y coord
 /// 01 h1a2. . b2
 ///
-fn generate_map_row_2w(row: u8, game: &Game) -> String {
+fn generate_map_row_2w(y_row: u8, game: &Game) -> String {
     let map = &game.map;
     let players = &game.players;
     let max_x = map.size;
 
     let mut buffer = String::new();
 
-    let row_10th = row / 10;
-    let row_1th = row % 10;
+    let row_10th = y_row / 10;
+    let row_1th = y_row % 10;
     buffer.push_str(&row_10th.to_string());
     buffer.push_str(&row_1th.to_string());
     buffer.push(' ');
 
-    for x in 0..max_x {
-        let cell = map.get(row, x);
+    for x_column in 0..max_x {
+        let cell = map.get(x_column, y_row);
         match cell.owner {
             Some(m) => {
                 let player_symbol = players
@@ -151,21 +151,21 @@ fn generate_map_row_2w(row: u8, game: &Game) -> String {
 /// Generates a row like where first two digits are y coord
 /// 01 h1 a2 .. .. b2
 ///
-fn generate_map_row_3w(row: u8, game: &Game) -> String {
+fn generate_map_row_3w(y_row: u8, game: &Game) -> String {
     let map = &game.map;
     let players = &game.players;
     let max_x = map.size;
 
     let mut buffer = String::new();
 
-    let row_10th = row / 10;
-    let row_1th = row % 10;
+    let row_10th = y_row / 10;
+    let row_1th = y_row % 10;
     buffer.push_str(&row_10th.to_string());
     buffer.push_str(&row_1th.to_string());
     buffer.push(' ');
 
-    for x in 0..max_x {
-        let cell = map.get(row, x);
+    for x_column in 0..max_x {
+        let cell = map.get(x_column, y_row);
         match cell.owner {
             Some(m) => {
                 let player_symbol = players
@@ -181,7 +181,7 @@ fn generate_map_row_3w(row: u8, game: &Game) -> String {
             }
         }
 
-        if x < map.size - 1 {
+        if x_column < map.size - 1 {
             buffer.push(' ');
         }
     }
